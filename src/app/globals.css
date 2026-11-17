@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Palet: "hijau pinus" untuk aksi utama, kertas dingin untuk latar.
+   Kontras teks/latar dan teks/tombol dirancang memenuhi WCAG AA. */
+:root {
+  --kertas: 244 247 247;
+  --permukaan: 255 255 255;
+  --tinta: 18 38 41;
+  --redup: 80 99 102;
+  --garis: 207 218 219;
+  --utama: 14 94 90;
+  --utama-teks: 255 255 255;
+  --peringatan: 138 90 0;
+  --bahaya: 170 32 32;
+  --berhasil: 22 101 52;
+}
+[data-tema="gelap"] {
+  --kertas: 13 22 24;
+  --permukaan: 22 34 37;
+  --tinta: 232 240 240;
+  --redup: 160 178 180;
+  --garis: 52 70 73;
+  --utama: 94 200 190;
+  --utama-teks: 6 30 28;
+  --peringatan: 240 190 90;
+  --bahaya: 255 140 140;
+  --berhasil: 120 220 150;
+}
+
+html { font-size: 16px; }
+/* Mode Besar: semua ukuran (rem) membesar 1,5x, termasuk tombol. */
+html[data-besar="true"] { font-size: 24px; }
+
+body {
+  background: rgb(var(--kertas));
+  color: rgb(var(--tinta));
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid rgb(var(--utama));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@keyframes kilau { 0% { opacity: .5 } 50% { opacity: 1 } 100% { opacity: .5 } }
+.skeleton { animation: kilau 1.4s ease-in-out infinite; background: rgb(var(--garis)); border-radius: 8px; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff; color: #000; }
+}
+
+/* ---------- Kartu berobat (ukuran kartu 85,6 x 54 mm) ---------- */
+.kartu-berobat {
+  width: 85.6mm;
+  min-height: 54mm;
+  padding: 4mm;
+  border: 0.4mm solid rgb(var(--tinta));
+  border-radius: 3mm;
+  background: rgb(var(--permukaan));
+  color: rgb(var(--tinta));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2mm;
+  font-size: 9pt;
+  line-height: 1.3;
+}
+.kartu-berobat .kartu-nama { font-size: 13pt; font-weight: 700; line-height: 1.2; }
+.kartu-berobat .kartu-rm { font-size: 15pt; font-weight: 700; letter-spacing: 0.04em; }
+
+/* Cetak selalu terang dan berukuran normal, apa pun tema/Mode Besar di layar. */
+@media print {
+  :root, [data-tema="gelap"] {
+    --kertas: 255 255 255; --permukaan: 255 255 255; --tinta: 0 0 0; --redup: 60 60 60;
+    --garis: 150 150 150; --utama: 0 0 0; --utama-teks: 255 255 255;
+  }
+  html[data-besar="true"] { font-size: 16px; }
+  @page { margin: 12mm; }
+  main { padding: 0 !important; }
+}
+
+/* ---------- Resep cetak ---------- */
+.resep-cetak {
+  max-width: 180mm; padding: 8mm; border: 0.3mm solid rgb(var(--tinta)); background: rgb(var(--permukaan));
+  color: rgb(var(--tinta)); font-size: 11pt; line-height: 1.45;
+}
+.resep-kop { text-align: center; border-bottom: 0.4mm solid rgb(var(--tinta)); padding-bottom: 3mm; margin-bottom: 4mm; }
+.resep-klinik { font-size: 15pt; font-weight: 700; }
+.resep-pasien p { margin: 0; }
+.resep-label { display: inline-block; min-width: 22mm; color: rgb(var(--redup)); }
+.resep-isi { margin: 6mm 0; min-height: 60mm; }
+.resep-obat { margin-bottom: 4mm; break-inside: avoid; }
+.resep-r { font-size: 12pt; }
+.resep-jumlah { float: right; }
+.resep-aturan { margin-left: 8mm; }
+.resep-catatan { margin-top: 4mm; font-style: italic; }
+.resep-ttd { margin-left: 55%; text-align: center; margin-top: 8mm; }
+.resep-garis { height: 18mm; }
+
+/* ---------- Label obat ---------- */
+.label-grid { display: flex; flex-wrap: wrap; gap: 4mm; }
+.label-obat {
+  width: 88mm; min-height: 48mm; padding: 3mm; border: 0.3mm dashed rgb(var(--tinta)); border-radius: 2mm;
+  background: rgb(var(--permukaan)); color: rgb(var(--tinta)); font-size: 10pt; line-height: 1.3; break-inside: avoid;
+}
+.label-klinik { font-size: 8pt; font-weight: 700; text-transform: none; }
+.label-pasien { font-weight: 700; font-size: 11pt; }
+.label-obat-nama { margin-top: 1.5mm; font-weight: 700; font-size: 12pt; }
+.label-aturan { margin: 1mm 0; font-size: 13pt; font-weight: 700; }
+.label-kecil { font-size: 8.5pt; font-weight: 400; color: rgb(var(--redup)); }
+@media print {
+  .resep-cetak { border: none; max-width: none; padding: 0; }
+  .label-obat { border-color: #000; }
+}
+
+/* ---------- Kuitansi ---------- */
+.kuitansi { position: relative; max-width: 150mm; }
+.kuitansi-tabel { width: 100%; border-collapse: collapse; margin-top: 4mm; }
+.kuitansi-tabel th, .kuitansi-tabel td { border-bottom: 0.2mm solid rgb(var(--garis)); padding: 1.2mm 1mm; text-align: left; }
+.kuitansi-tabel td:nth-child(n+2), .kuitansi-tabel th:nth-child(n+2) { text-align: right; }
+.kuitansi-void { position: absolute; top: 40%; left: 12%; transform: rotate(-20deg); font-size: 40pt; font-weight: 700; color: rgb(var(--bahaya)); opacity: .35; border: 1mm solid currentColor; padding: 0 6mm; pointer-events: none; }
